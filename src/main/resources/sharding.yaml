@@ -1,0 +1,32 @@
+dataSources:
+#  default-data-source-name: master
+  master:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3406/oee?serverTimezone=GMT%2B8&characterEncoding=utf8&useSSL=true
+    username: zhang
+    password: 123456
+
+
+
+props:
+  sql-show: true
+
+
+rules:
+  - !SHARDING
+    tables:
+      equipment_oee:
+        actualDataNodes: master.equipment_oee
+        tableStrategy:
+          complex:
+            shardingColumns: statistics_cycle,statistics_time,serial_no
+            shardingAlgorithmName: oeecyclealgorithmsharding
+
+
+    shardingAlgorithms:
+      oeecyclealgorithmsharding:
+        type: CLASS_BASED
+        props:
+          strategy: complex
+          algorithmClassName: com.example.testsharding.OeeCycleAlgorithmSharding
